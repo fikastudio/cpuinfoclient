@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"net/url"
 )
 
 type SearchResponse struct {
@@ -30,7 +31,10 @@ func New() *Client {
 }
 
 func (cl *Client) Search(ctx context.Context, name string) (*SearchResponse, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://cpuinfo.fly.dev/v1/cpu?search="+name, nil)
+	params := url.Values{}
+	params.Set("search", name)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://cpuinfo.fly.dev/v1/cpu?"+params.Encode(), nil)
 	if err != nil {
 		return nil, err
 	}
