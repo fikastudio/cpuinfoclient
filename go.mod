@@ -1,3 +1,3 @@
 module github.com/fikastudio/cpuinfoclient
 
-go 1.23.3
+go 1.20.0
