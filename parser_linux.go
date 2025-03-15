@@ -4,16 +4,17 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 )
 
-func ProcessorName() (string, error) {
+func scanFor(searchKey string) (string, error) {
 	f, err := os.Open("/proc/cpuinfo")
 	if err != nil {
 		return "", fmt.Errorf("could not open /proc/cpuinfo: %w", err)
 	}
 
-	var name string
+	var textValue string
 
 	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
@@ -23,8 +24,8 @@ func ProcessorName() (string, error) {
 		}
 
 		key, value := strings.TrimSpace(parts[0]), strings.TrimSpace(parts[1])
-		if key == "model name" {
-			name = value
+		if key == searchKey {
+			textValue = value
 			break
 		}
 	}
@@ -33,5 +34,18 @@ func ProcessorName() (string, error) {
 		return "", err
 	}
 
-	return name, nil
+	return textValue, nil
+}
+
+func ProcessorName() (string, error) {
+	return scanFor("cpu name")
+}
+
+func NumCores() (uint64, error) {
+	textValue, err := scanFor("cpu cores")
+	if err != nil {
+		return 0, err
+	}
+
+	return strconv.ParseUint(textValue, 10, 64)
 }
