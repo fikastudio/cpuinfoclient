@@ -38,7 +38,7 @@ func scanFor(searchKey string) (string, error) {
 }
 
 func ProcessorName() (string, error) {
-	return scanFor("cpu name")
+	return scanFor("model name")
 }
 
 func NumCores() (uint64, error) {

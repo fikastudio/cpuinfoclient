@@ -8,4 +8,5 @@ import (
 
 func main() {
 	fmt.Println(cpuinfoclient.ProcessorName())
+	fmt.Println(cpuinfoclient.NumCores())
 }
